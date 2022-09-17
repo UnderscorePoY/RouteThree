@@ -29,8 +29,8 @@ public class BattleOptions {
     private ArrayList<Integer> order = null;
     private ArrayList<Weather> weathers = null;
     
-    private boolean isBattleTower = false;
-    private boolean isDoubleBattle = false;
+    private Boolean isBattleTower = null;
+    private Boolean isDoubleBattle = null;
     
     private boolean printStatRangesOnLvl = false;
     private boolean printStatsOnLvl = false;
@@ -40,7 +40,7 @@ public class BattleOptions {
     //verbose options
     public static final int NONE = 0;
     public static final int SOME = 1;
-    public static final int ALL = 2;
+    public static final int MOST = 2;
     public static final int EVERYTHING = 3;
     
     public BattleOptions() {
@@ -268,7 +268,11 @@ public class BattleOptions {
 		this.verbose = verbose;
 	}
 
-	public boolean isBattleTower() {
+	public Boolean isBattleTower() {
+		return isBattleTower == null ? false : isBattleTower;
+	}
+	
+	public Boolean isTrueBattleTower() {
 		return isBattleTower;
 	}
 
@@ -276,10 +280,14 @@ public class BattleOptions {
 		this.isBattleTower = isBattleTower;
 	}
 
-	public boolean isDoubleBattle() {
-		return isDoubleBattle;
+	public Boolean isDoubleBattle() {
+		return isDoubleBattle == null ? false : isDoubleBattle;
 	}
 
+	public Boolean isTrueDoubleBattle() {
+		return isDoubleBattle;
+	}
+	
 	public void setDoubleBattle(boolean isDoubleBattle) {
 		this.isDoubleBattle = isDoubleBattle;
 	}

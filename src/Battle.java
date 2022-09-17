@@ -78,10 +78,8 @@ public class Battle extends GameAction {
 
         // TODO: automatically determine whether or not to print
         if (opponent instanceof Pokemon) {
-            if(getVerbose() == BattleOptions.ALL || getVerbose() == BattleOptions.EVERYTHING)
-                printBattle(p, (Pokemon) opponent);
-            else if (getVerbose() == BattleOptions.SOME)
-                printShortBattle(p, (Pokemon) opponent);
+        	if(getVerbose() != BattleOptions.NONE)
+        		printBattle(p, (Pokemon) opponent);
 
             opponent.battle(p, options);
             if (p.getLevel() > lastLvl) {
@@ -154,8 +152,18 @@ public class Battle extends GameAction {
             ArrayList<Integer> order = options.getOrder();
             ArrayList<Weather> weathers = options.getWeathers();
             
-            options.setDoubleBattle(t.getDoubleBattle() != 0);
-            //TODO : battleTower not implemented
+            // TODO: force battle tower
+            /*
+            if (options.isTrueBattleTower() == null) // no override
+            	options.setBattleTower(t.getBattleTower() != 0);
+            // override is already in options otherwise
+            */
+            
+            if (options.isTrueDoubleBattle() == null) // no override
+            	options.setDoubleBattle(t.getDoubleBattle() != 0);
+            // override is already in options otherwise
+            
+            
             
             Iterable<Pokemon> trainerPokes = null;
             if(order == null) {
@@ -173,7 +181,7 @@ public class Battle extends GameAction {
                 trainerPokes = modPokes;
                 t.setParty(modPokes);
             }
-            if(getVerbose() == BattleOptions.ALL || getVerbose() == BattleOptions.SOME || getVerbose() == BattleOptions.EVERYTHING) {
+            if(getVerbose() == BattleOptions.MOST || getVerbose() == BattleOptions.SOME || getVerbose() == BattleOptions.EVERYTHING) {
                 Main.appendln(Constants.endl + t.toString(p));
             }
             for (Pokemon opps : trainerPokes) {
@@ -306,11 +314,15 @@ public class Battle extends GameAction {
                 }
 
                 if(sxp != 0) {
+                	/*
                     if(getVerbose() == BattleOptions.ALL || getVerbose() == BattleOptions.EVERYTHING)
                         printBattle(p, (Pokemon) opps);
                     else if (getVerbose() == BattleOptions.SOME)
                         printShortBattle(p, (Pokemon) opps);
+                	 */
                     if (getVerbose() != BattleOptions.NONE) {
+                    	printBattle(p, (Pokemon) opps);
+                    	
                     	int meMinSpeed = options.getMod1().modSpeWithIVandNature(p, IVs.MIN, p.getNature());
                     	int meMaxSpeed = options.getMod1().modSpeWithIVandNature(p, IVs.MAX, p.getNature());
                     	int oppSpeed = options.getMod2().modSpe(opps);
@@ -376,7 +388,7 @@ public class Battle extends GameAction {
                 sxpIdx++;
             }
         }
-        if(getVerbose() == BattleOptions.ALL || getVerbose() == BattleOptions.SOME) {
+        if(getVerbose() == BattleOptions.MOST || getVerbose() == BattleOptions.SOME) {
             Main.appendln(String.format("LVL: %d EXP NEEDED: %d/%d", p.getLevel(),
                     p.expToNextLevel(), p.expForLevel()));
         }
@@ -388,9 +400,11 @@ public class Battle extends GameAction {
     }
 
     // does not actually do the battle, just prints short summary
+    /*
     public void printShortBattle(Pokemon us, Pokemon them) {
         Main.appendln(DamageCalculator.shortBattleSummary(us, them, options));
     }
+    */
 }
 
 class Encounter extends Battle {

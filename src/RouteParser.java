@@ -424,7 +424,7 @@ public class RouteParser {
               //set this battle to single
                 else if (s.equalsIgnoreCase("-nodouble") 
                 		|| s.equalsIgnoreCase("-nodoubleBattle")) {
-                	options.setDoubleBattle(true);
+                	options.setDoubleBattle(false);
                 	nf = NextFlag.ANY_FLAG;
                 	continue;
                 }
@@ -716,7 +716,7 @@ public class RouteParser {
                 } else if (s.equalsIgnoreCase("SOME")) {
                     options.setVerbose(BattleOptions.SOME);
                 } else if (s.equalsIgnoreCase("ALL")) {
-                    options.setVerbose(BattleOptions.ALL);
+                    options.setVerbose(BattleOptions.MOST);
                 } else if(s.equalsIgnoreCase("EVERYTHING")) {
                     options.setVerbose(BattleOptions.EVERYTHING);
                 }

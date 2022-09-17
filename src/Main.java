@@ -64,6 +64,10 @@ public class Main {
         String natureStr = configIni.get("poke",  "nature");
         Nature nature = Nature.getEnum(natureStr);
         
+        String abilityStr = configIni.get("poke",  "ability");
+        Ability ability = Ability.getEnum(abilityStr);
+
+        
         int hpIV = configIni.get("poke", "hpIV", int.class);
         int atkIV = configIni.get("poke", "atkIV", int.class);
         int defIV = configIni.get("poke", "defIV", int.class);
@@ -83,7 +87,7 @@ public class Main {
         IVs ivs = new IVs(hpIV, atkIV, defIV, spaIV, spdIV, speIV);
         Pokemon p = null;
         try {
-            p = new Pokemon(species, level, nature, ivs, false);
+            p = new Pokemon(species, level, nature, ivs, false, ability);
             if(configIni.get("poke").containsKey("boostedExp")) {
                 boolean boostedExp = configIni.get("poke", "boostedExp", boolean.class);
                 p.setBoostedExp(boostedExp);

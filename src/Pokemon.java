@@ -34,6 +34,11 @@ public class Pokemon implements Battleable {
         this(s, newLevel, nature, true);
         this.setAbility(s.getAbility1());
         setExpForLevel();
+    }    
+    public Pokemon(Species s, int newLevel, Nature nature, Ability ability) {
+        this(s, newLevel, nature, true);
+        this.setAbility(ability);
+        setExpForLevel();
     }
 
     // default based off of species and level (works on all trainer pokemon,
@@ -50,10 +55,29 @@ public class Pokemon implements Battleable {
         this.wild = wild;
         setExpForLevel();
     }
+    
+    public Pokemon(Species s, int newLevel, Nature nat, boolean wild, Ability ability) {
+        species = s;
+        level = newLevel;
+        nature = nat;
+        this.setAbility(ability);
+        ivs = new IVs();
+        setZeroEVs();
+        moves = Moveset.defaultMoveset(species, level);
+        calculateStats();
+        this.wild = wild;
+        setExpForLevel();
+    }
 
     // will work for leaders
     public Pokemon(Species s, int newLevel, Nature nat, Moveset moves, boolean wild) {
         this(s, newLevel, nat, wild);
+        this.moves = moves;
+        calculateStats();
+        setExpForLevel();
+    }    
+    public Pokemon(Species s, int newLevel, Nature nat, Moveset moves, boolean wild, Ability ability) {
+        this(s, newLevel, nat, wild, ability);
         this.moves = moves;
         calculateStats();
         setExpForLevel();
@@ -71,12 +95,38 @@ public class Pokemon implements Battleable {
         this.wild = wild;
         setExpForLevel();
     }
+    
+    public Pokemon(Species s, int newLevel, Nature nat, IVs ivs, boolean wild, Ability ability) {
+        species = s;
+        level = newLevel;
+        nature = nat;
+        this.setAbility(ability);
+        this.ivs = ivs;
+        setZeroEVs();
+        moves = Moveset.defaultMoveset(species, level);
+        calculateStats();
+        this.wild = wild;
+        setExpForLevel();
+    }
 
     public Pokemon(Species s, int newLevel, Nature nat, Moveset moves, IVs ivs, boolean wild) {
         species = s;
         level = newLevel;
         nature = nat;
         this.setAbility(s.getAbility1());
+        this.ivs = ivs;
+        setZeroEVs();
+        this.moves = moves;
+        calculateStats();
+        this.wild = wild;
+        setExpForLevel();
+    }
+    
+    public Pokemon(Species s, int newLevel, Nature nat, Moveset moves, IVs ivs, boolean wild, Ability ability) {
+        species = s;
+        level = newLevel;
+        nature = nat;
+        this.setAbility(ability);
         this.ivs = ivs;
         setZeroEVs();
         this.moves = moves;

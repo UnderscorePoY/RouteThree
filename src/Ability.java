@@ -82,4 +82,10 @@ public enum Ability {
 	SHELL_ARMOR,
 	CACOPHONY,
 	AIR_LOCK;
+	
+	public static Ability getEnum(String value) {
+        for(Ability v : values())
+            if(v.name().equalsIgnoreCase(value)) return v;
+        throw new IllegalArgumentException();
+    }
 }

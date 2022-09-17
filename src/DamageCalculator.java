@@ -325,7 +325,7 @@ public class DamageCalculator {
 	        else
 	        	sb.append(String.format("%d-%d %.02f-%.02f%%", minDmg, maxDmg, minPct, maxPct));
 	        
-	        if(hasCrit()) {
+	        if(hasCrit() && minPct < 100.) { // Only display crit if normal rolls are not guaranteed
 		        sb.append("\t(crit: ");
 		        
 		        int critMinDmg = lowestCritDamage();
@@ -511,7 +511,7 @@ public class DamageCalculator {
 		            sb.append("          NON-CRITS");
 		            appendDetailledPercentMap(sb, dmgMap);
 		            	            
-		            if(this.hasCrit()) {
+		            if(hasCrit()) {
 			            TreeMap<Integer,Double> critMap = percentMapWithMaxHP(this.critDamageRolls, p2.getHP());
 			            sb.append("          CRITS");
 			            appendDetailledPercentMap(sb, critMap);
@@ -540,7 +540,7 @@ public class DamageCalculator {
 					appendNormalDamages(sb);
 					
 					// crit rolls
-					if(hasCrit()) {
+					if(hasCrit() && lowestDamage() < p2.getHP()) {
 						sb.append("\tCrit rolls: ");
 						appendCritDamages(sb);
 					}
@@ -554,6 +554,48 @@ public class DamageCalculator {
 					// overall chance of KO
 					if (Settings.overallChanceKO)
 					appendOverallChanceKO(sb);
+				}
+				
+				sb.append(endl);
+			}
+		    
+		    public void appendBasicMoveInfo(StringBuilder sb) {
+				String endl = Constants.endl;
+				Move m = this.attackMove;
+				int _extra_multiplier = this.extra_multiplier;
+				Pokemon p1 = attacker;
+				Pokemon p2 = defender;
+				StatModifier mod1 = atkMod;
+				StatModifier mod2 = defMod;
+				Object param = null;
+
+				appendFormattedMoveName(sb, m, p1, p2, mod1, mod2, _extra_multiplier, isBattleTower, isDoubleBattle, param);
+				
+				if (hasDamage()) {
+					sb.append("\t");
+					appendShortDamages(sb);
+					
+					// normal rolls
+					sb.append("\tNormal rolls: ");
+					appendNormalDamages(sb);
+					
+					// crit rolls
+					if(hasCrit() && lowestDamage() < p2.getHP()) { // Only display when normal rolls aren't guaranteed
+						sb.append("\tCrit rolls: ");
+						appendCritDamages(sb);
+					}
+					
+					/*
+					appendNShots(sb);
+					
+					// guaranteed n-shot
+					if (Settings.showGuarantees)
+					appendGuaranteed(sb);
+					
+					// overall chance of KO
+					if (Settings.overallChanceKO)
+					appendOverallChanceKO(sb);
+					*/
 				}
 				
 				sb.append(endl);
@@ -1309,9 +1351,11 @@ public class DamageCalculator {
         	sb.append(String.format("~%s~ ", mod.getWeather()));
     }
     
-    public static void appendFormattedMoveName(StringBuilder sb, Move m, Pokemon p1,
+    public static void appendFormattedMoveName(StringBuilder sb, Move move, Pokemon p1,
             Pokemon p2, StatModifier mod1, StatModifier mod2,
             int _extra_multiplier, boolean isBattleTower, boolean isDoubleBattle, Object param) {
+    	Move m = new Move(move);
+    	
         // Move name
     	switch(m.getEffect()) {
     	//case RAGE:
@@ -1323,6 +1367,8 @@ public class DamageCalculator {
     	case HIDDEN_POWER:
     		Type type = p1.getIVs().getHiddenPowerType();
 	        int power = p1.getIVs().getHiddenPowerPower();
+	        m.setType(type);
+	        m.setPower(power);
 	        sb.append(String.format("%s [%s %d]", m.getName(), type, power)); // TODO : hardcoded
 	        break;
 	        
@@ -1599,28 +1645,39 @@ public class DamageCalculator {
         appendPokemonSummary(sb, p1, mod1);
         sb.append(endl);
 
-        appendMainDamagesSummary(sb, p1, p2, mod1, mod2, options.isBattleTower(), options.isDoubleBattle());
+        
+        appendMainDamagesSummary(sb, p1, p2, mod1, mod2, options.isBattleTower(), options.isDoubleBattle(), options.getVerbose());
         sb.append(endl);
 
-        if(options.getVerbose() == BattleOptions.EVERYTHING || options.getVerbose() == BattleOptions.ALL) {
+        /*
+        if(options.getVerbose() == BattleOptions.EVERYTHING) {
             appendVerboseDamagesSummary(sb, p1, p2, options);
             sb.append(endl);
-            
-            // Opponent side
-            appendPokemonSummary(sb, p2, mod2);
-            sb.append(endl);
         }
-        appendMainDamagesSummary(sb, p2, p1, mod2, mod1, options.isBattleTower(), options.isDoubleBattle());
+        */
+        
+        // Opponent side
+        appendPokemonSummary(sb, p2, mod2);
         sb.append(endl);
-
+        
+        /*
+        if(options.getVerbose() == BattleOptions.ALL) {
+        	
+        */
+	        appendMainDamagesSummary(sb, p2, p1, mod2, mod1, options.isBattleTower(), options.isDoubleBattle(), options.getVerbose());
+	        sb.append(endl);
+        /*}
+        
         if(options.getVerbose() == BattleOptions.EVERYTHING) {
             appendVerboseDamagesSummary(sb, p2, p1, options);
             sb.append(endl);
         }
+        */
         return sb.toString();
     }
     
     // used for the less verbose option
+    /*
     public static String shortBattleSummary(Pokemon p1, Pokemon p2, BattleOptions options) {
         StringBuilder sb = new StringBuilder();
         String endl = Constants.endl;
@@ -1645,6 +1702,7 @@ public class DamageCalculator {
         
         return sb.toString();
     }
+    */
 
        
     
@@ -1652,19 +1710,19 @@ public class DamageCalculator {
     // HELPER DAMAGE FORMATTING METHODS //
     // ******************************** //
     
-     
+    /*
     public static void appendVerboseDamagesSummary(StringBuilder sb, Pokemon p1, Pokemon p2, BattleOptions options) {
     	damagesSummaryCore(sb, p1, p2, options.getMod1(), options.getMod2(), options.isBattleTower(), options.isDoubleBattle(), true);
     }
-    
+    */
     public static void appendMainDamagesSummary(StringBuilder sb, Pokemon p1, Pokemon p2, StatModifier mod1, StatModifier mod2, 
-    		boolean isBattleTower, boolean isDoubleBattle) {
-    	damagesSummaryCore(sb, p1, p2, mod1, mod2, isBattleTower, isDoubleBattle, false);
+    		boolean isBattleTower, boolean isDoubleBattle, int verboseLevel) {
+    	damagesSummaryCore(sb, p1, p2, mod1, mod2, isBattleTower, isDoubleBattle, verboseLevel);
     }
     
     //TODO: fuzzy, hacky, idk ... but at least the logic stays within a single method
     private static void damagesSummaryCore(StringBuilder sb, Pokemon p1, Pokemon p2, StatModifier mod1, StatModifier mod2, 
-    		boolean isBattleTower, boolean isDoubleBattle, boolean isExtraDamageHelp) {
+    		boolean isBattleTower, boolean isDoubleBattle, int verboseLevel) {
     	String endl = Constants.endl;
     	
     	// First, append attacker move calcs
@@ -1673,20 +1731,26 @@ public class DamageCalculator {
         	case FURY_CUTTER:
         		for (int _extra_multiplier : new Integer[] {1, 2, 3, 4, 5}) { //TODO: hardcoded
         			Damages damages = new Damages(move, p1, p2, mod1, mod2, _extra_multiplier, isBattleTower, isDoubleBattle);
-        			if (isExtraDamageHelp)
-                    	damages.appendDetailledPercentDamages(sb);
-                    else
+        			if (verboseLevel == BattleOptions.SOME)
+        				damages.appendBasicMoveInfo(sb);
+        			else if (verboseLevel == BattleOptions.MOST)
                     	damages.appendAllMoveInfo(sb);
+        			
+        			if (verboseLevel >= BattleOptions.EVERYTHING)
+                    	damages.appendDetailledPercentDamages(sb);
                 }
         		break;
         		
         	case ROLLOUT:
         		for (int _extra_multiplier : new Integer[] {1, 2, 3, 4, 5, 6}) { //TODO: hardcoded
         			Damages damages = new Damages(move, p1, p2, mod1, mod2, _extra_multiplier, isBattleTower, isDoubleBattle);
-        			if (isExtraDamageHelp)
-                    	damages.appendDetailledPercentDamages(sb);
-                    else
+        			if (verboseLevel == BattleOptions.SOME)
+        				damages.appendBasicMoveInfo(sb);
+        			else if (verboseLevel == BattleOptions.MOST)
                     	damages.appendAllMoveInfo(sb);
+        			
+        			if (verboseLevel >= BattleOptions.EVERYTHING)
+                    	damages.appendDetailledPercentDamages(sb);
                 }
         		break;
         		
@@ -1695,10 +1759,13 @@ public class DamageCalculator {
                 for (int power : new Integer[] {10, 30, 50, 70, 90, 110, 150}) { //TODO: hardcoded
                     move.setPower(power);
                     Damages damages = new Damages(move, p1, p2, mod1, mod2, 1, isBattleTower, isDoubleBattle);
-                    if (isExtraDamageHelp)
-                    	damages.appendDetailledPercentDamages(sb);
-                    else
+                    if (verboseLevel == BattleOptions.SOME)
+        				damages.appendBasicMoveInfo(sb);
+        			else if (verboseLevel == BattleOptions.MOST)
                     	damages.appendAllMoveInfo(sb);
+        			
+        			if (verboseLevel >= BattleOptions.EVERYTHING)
+                    	damages.appendDetailledPercentDamages(sb);
                 }
                 move.setPower(oldPower);
                 break;
@@ -1708,10 +1775,13 @@ public class DamageCalculator {
             	for(int power : new Integer[]{20, 40, 80, 100, 150, 200}) { //TODO: hardcoded
             		move.setPower(power);
             		Damages damages = new Damages(move, p1, p2, mod1, mod2, 1, isBattleTower, isDoubleBattle);
-                    if (isExtraDamageHelp)
-                    	damages.appendDetailledPercentDamages(sb);
-                    else
+            		if (verboseLevel == BattleOptions.SOME)
+        				damages.appendBasicMoveInfo(sb);
+        			else if (verboseLevel == BattleOptions.MOST)
                     	damages.appendAllMoveInfo(sb);
+        			
+        			if (verboseLevel >= BattleOptions.EVERYTHING)
+                    	damages.appendDetailledPercentDamages(sb);
             	}
                 move.setPower(oldPower);
                 break;
@@ -1721,10 +1791,13 @@ public class DamageCalculator {
             	for(int power : new Integer[]{40, 80, 120}) { //TODO: hardcoded
             		move.setPower(power);
             		Damages damages = new Damages(move, p1, p2, mod1, mod2, 1, isBattleTower, isDoubleBattle);
-                    if (isExtraDamageHelp)
-                    	damages.appendDetailledPercentDamages(sb);
-                    else
+            		if (verboseLevel == BattleOptions.SOME)
+        				damages.appendBasicMoveInfo(sb);
+        			else if (verboseLevel == BattleOptions.MOST)
                     	damages.appendAllMoveInfo(sb);
+        			
+        			if (verboseLevel >= BattleOptions.EVERYTHING)
+                    	damages.appendDetailledPercentDamages(sb);
             	}
                 move.setPower(oldPower);
                 //TODO : handle healing
@@ -1733,23 +1806,32 @@ public class DamageCalculator {
         	case PURSUIT:
             	for(int _extra_multiplier : new Integer[]{1, 2}) { //TODO: hardcoded
             		Damages damages = new Damages(move, p1, p2, mod1, mod2, _extra_multiplier, isBattleTower, isDoubleBattle);
-                    if (isExtraDamageHelp)
-                    	damages.appendDetailledPercentDamages(sb);
-                    else
+            		if (verboseLevel == BattleOptions.SOME)
+        				damages.appendBasicMoveInfo(sb);
+        			else if (verboseLevel == BattleOptions.MOST)
                     	damages.appendAllMoveInfo(sb);
+        			
+        			if (verboseLevel >= BattleOptions.EVERYTHING)
+                    	damages.appendDetailledPercentDamages(sb);
             	}
                 break;
                 
         	default:
         		Damages damages = new Damages(move, p1, p2, mod1, mod2, 1, isBattleTower, isDoubleBattle);
-                if (isExtraDamageHelp)
-                	damages.appendDetailledPercentDamages(sb);
-                else
+        		if (verboseLevel == BattleOptions.SOME)
+    				damages.appendBasicMoveInfo(sb);
+    			else if (verboseLevel == BattleOptions.MOST)
                 	damages.appendAllMoveInfo(sb);
+    			
+    			if (verboseLevel >= BattleOptions.EVERYTHING)
+                	damages.appendDetailledPercentDamages(sb);
             	break;
             	
         	} // end switch
         } // end for
+        
+        if(verboseLevel == BattleOptions.NONE || verboseLevel == BattleOptions.SOME)
+        	return;
         
         // Then, append residuals
         boolean canPoison = false;
@@ -1813,10 +1895,6 @@ public class DamageCalculator {
 			SECRET_POWER, //TODO
 			*/
         }
-    	
-    	
-    	if(isExtraDamageHelp)
-    		return;
     	
     	// poison
     	if (p1.getSpecies().getType1() != Type.POISON && p1.getSpecies().getType2() != Type.POISON 
