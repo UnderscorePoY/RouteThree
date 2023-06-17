@@ -107,7 +107,7 @@ A configuration file (generally with the `.ini` extension) gathers the primary i
   `"nature"`   | A string. | The nature of the species. <br/>(Defaults to a neutral nature if missing.)
   `"ability"`   | A string. | The ability of the species. (Defaults to the first species ability if missing.)
   `"hpIV"`   | An integer between `0` and `31`.| The Hit Point Individual Value (IV) of the main Pokémon. <br/>(Defaults to `31` if missing.)
-  `"atkIV"`   | An integer between `0` and `31`.| The Hit Point Individual Value (IV) of the main Pokémon. <br/>(Defaults to `31` if missing.)
+  `"atkIV"`   | An integer between `0` and `31`.| The Attack Individual Value (IV) of the main Pokémon. <br/>(Defaults to `31` if missing.)
   `"defIV"`   | An integer between `0` and `31`.| The Defense Individual Value (IV) of the main Pokémon. <br/>(Defaults to `31` if missing.)
   `"spaIV"`   | An integer between `0` and `31`.| The Special Attack Individual Value (IV) of the main Pokémon. <br/>(Defaults to `31` if missing.) 
   `"spdIV"`   | An integer between `0` and `31`.| The Special Defense Individual Value (IV) of the main Pokémon. <br/>(Defaults to `31` if missing.)
