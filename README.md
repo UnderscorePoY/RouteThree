@@ -141,7 +141,7 @@ A configuration file (generally with the `.ini` extension) gathers the primary i
 ○ You can disobey this convention at will.  
 ○ For readability purposes, the commands here will display some uppercase letters.  
 `<ARGUMENT>` : When using angle brackets, it refers to a mandatory argument. You SHOULD NOT be writing these brackets in your routing files.  
-`[ARGUMENT]` : when using square brackets, it refers to an optional argument. You can omit it if you don't need it. You SHOULD NOT be writing these brackets in your routing files. 
+`[ARGUMENT]` : When using square brackets, it refers to an optional argument. You can omit it if you don't need it. You SHOULD NOT be writing these brackets in your routing files. 
 
 The `resources` folder contains most of the data the tool loads. You can look into the different files to check on trainer names, item names, etc.  
 
