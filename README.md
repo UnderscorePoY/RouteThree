@@ -277,7 +277,7 @@ The following commands give you the desired badge without fighting its correspon
   `"L<NUM> <SPECIES> <NATURE>"` : Triggers a wild battle against a level `NUM` `SPECIES` with nature `NATURE` and perfect IVs.  
   
   *Wild encounters options :*  
-  `"<ATK> <DEF> <SPA> <SPD> <SPE>"` : Gives IVs `ATK DEF SPA SPD SPE` to the wild encounter.  
+  `"<HP> <ATK> <DEF> <SPA> <SPD> <SPE>"` : Gives IVs `HP ATK DEF SPA SPD SPE` to the wild encounter.  
 > Example : `L45 KYOGRE HASTY 27 31 7 25 18 26 // Fast Boi`  
 
   `"-trainer"` : Sets the wild encounter as a trainer Pokemon. Mainly gives access to the x1.5 experience multiplier.  
