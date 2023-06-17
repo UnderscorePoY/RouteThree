@@ -104,7 +104,7 @@ A configuration file (generally with the `.ini` extension) gathers the primary i
   --------------- | -------------- | --------------
   `"species"`   | A string. | The name of the main Pokémon species.
   `"level"`   | An integer between `1` and `100`.| The starting level of the species.
-  `"nature"`   | A string. | The nature of the species. <br/>(Defaults to a neutral species if missing.)
+  `"nature"`   | A string. | The nature of the species. <br/>(Defaults to a neutral nature if missing.)
   `"ability"`   | A string. | The ability of the species. (Defaults to the first species ability if missing.)
   `"hpIV"`   | An integer between `0` and `31`.| The Hit Point Individual Value (IV) of the main Pokémon. <br/>(Defaults to `31` if missing.)
   `"atkIV"`   | An integer between `0` and `31`.| The Hit Point Individual Value (IV) of the main Pokémon. <br/>(Defaults to `31` if missing.)
