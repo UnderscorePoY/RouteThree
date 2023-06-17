@@ -342,7 +342,7 @@ Here is the exhautive list of implemented modifiers :
   ---------------- | ---------- 
   `"CHARGED_UP"`  | x2 for Electric type moves.   
   `"MUDSPORT"`  | x1/2 for Electric type moves.   
-  `"WATERSPOUT"`  | x1/2 for Fire type moves.   
+  `"WATERSPORT"`  | x1/2 for Fire type moves.   
   `"UNDERWATER"`  | x2 if using Surf.   
   `"REFLECT"`  | x1/2 for Physical moves (x2/3 during double battles).   
   `"LIGHTSCREEN"`  | x1/2 for Special moves (x2/3 during double battles).   
