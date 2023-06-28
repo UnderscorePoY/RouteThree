@@ -209,7 +209,7 @@ The `resources` folder contains most of the data the tool loads. You can look in
 ##### Experience
   Item name|  Multiplier  
   --------------- | -------------- 
-  `"luckyEgg"`   | x2  
+  `"luckyEgg"`   | x1.5  
 
 ##### Species-boosting items
   Item name| Species        | Boosted stats             | Multiplier  
